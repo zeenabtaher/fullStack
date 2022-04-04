@@ -2,8 +2,8 @@ import { useState } from 'react'
 
 const Statistics = ({good, bad, neutral}) => {
 const all = good + neutral + bad
-const average = (good + neutral + bad) / 3
-const positive = good / (neutral + bad)*100
+const average = ((good-bad) /all).toFixed(1)
+const positive = (good / (all)*100).toFixed(1) + '%'
 
 if (all == 0){
   return (
@@ -25,7 +25,7 @@ if (all == 0){
 }
 
 const StatisticLine = (props) => (
-  <p>{props.text} {props.value}</p>
+  <p>{props.text} {props.value} </p>
 )
 
 
