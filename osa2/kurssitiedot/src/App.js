@@ -37,7 +37,10 @@ const Course = ({course}) => {
       <ul>
        {course.parts.map(parts => 
           <Content key={parts.id} osat = {parts}/>
-        )}</ul>
+        )}
+        <Total osat={course.parts} />
+        </ul>
+         
     </div>
   )
 }
@@ -52,8 +55,18 @@ const Content = ({osat}) => {
 return(
   <div>
     <p>{osat.name} {osat.exercises}</p>
+   
   </div>
 )
+} 
+
+const Total = ({osat}) => {
+  const yhteensa = osat.reduce((eka, loput) => 
+   eka + loput.exercises, 0)
+
+  return (
+    <p>Yhteensä tehtäviä on {yhteensa}</p>
+  )
 }
 
 export default App;
