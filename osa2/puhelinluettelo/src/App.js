@@ -13,6 +13,11 @@ const App = () => {
   }
 
   const addPerson = (event) => {
+    if ((persons.some((person) => person.nimi === newName))){
+      console.log('toimii')
+      window.alert(`${newName} on jo puhelinluettelossa`)
+    }
+    
     event.preventDefault()
     const personObject = {
       nimi: newName,
@@ -21,6 +26,7 @@ const App = () => {
     setPersons(persons.concat(personObject))
     setNewName('')
   }
+  
   return (
     <div>
       <h2>Phonebook</h2>
@@ -39,6 +45,5 @@ const App = () => {
        </p>)}
     </div>
   )
-
 }
 export default App;
