@@ -1,15 +1,20 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import axios from 'axios'
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    { nimi: 'Arto Hellas', numero: '040-123456' },
-    { nimi: 'Ada Lovelace', numero: '39-44-5323523' },
-    { nimi: 'Dan Abramov', numero: '12-43-234345' },
-    { nimi: 'Mary Poppendieck', numero: '39-23-6423122' }
-  ]) 
+  const [persons, setPersons] = useState([]) 
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
+
+  useEffect(() => {
+    axios
+      .get('http://localhost:3001/persons')
+      .then(response => {
+        setPersons(response.data)
+      })
+  }, [])
+
 
   //tapahtuman käsittelijä uudelle nimelle
   const handleNewName = (event) =>{
