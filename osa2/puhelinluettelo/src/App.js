@@ -48,32 +48,54 @@ const App = () => {
   const filtteri = persons.filter(persons => persons.nimi.toLowerCase().includes(filter.toLowerCase()))
   return (
     <div>
-      <h2>Phonebook</h2>
-      <form onSubmit={addPerson}>
-        <div>
-          etsi luettelosta: <input onChange={handleFilter}/>
-        </div>
+      <h2>Puhelinluettelo</h2>
+      
+          <Filter onChange={handleFilter}/>
+
         <h2>Lisää uusi henkilö</h2>
-        <div>
-          nimi: <input value={newName} onChange={handleNewName}/>
-        </div>
-        <div>
-          puhelinnumero: <input value={newNumber} onChange={handeleNewNumber} />
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
+        <PersonForm onSubmit={addPerson} 
+        newName={newName} 
+        newNumber={newNumber}
+        nameChange = {handleNewName}
+        numberChange = {handeleNewNumber}/>
+        
       <h2>Numbers</h2>
-      {/*persons.map(persons =>
-       <p key={persons.id}>
-        {persons.nimi}   {persons.numero}
-      </p>)*/}
-       {filtteri.map(persons =>
-        <p key={persons.id}> 
-        {persons.nimi} {persons.numero}
-        </p>)}
+      <Persons filtteri={filtteri} persons={persons}/>
     </div>
   )
+}
+
+const Persons = ({filtteri}) => {
+return(
+  <div>
+    {filtteri.map(persons =>
+    <p key={persons.id}>
+      {persons.nimi} {persons.numero}
+    </p>
+   )}
+  </div>
+)}
+
+const Filter = ({onChange}) => {
+return(
+  <div>
+   etsi luettelosta: <input onChange={onChange}/>
+  </div>
+)}
+
+const PersonForm = ({onSubmit, newName, newNumber, nameChange, numberChange}) => {
+return(
+  <form onSubmit={onSubmit}> 
+    <div>
+      nimi: <input value={newName} onChange={nameChange}/>
+    </div>
+    <div>
+      puhelinnumero: <input value={newNumber} onChange={numberChange}/>
+    </div>
+    <div>
+          <button type="submit">lisää</button>
+        </div>
+  </form>
+)
 }
 export default App;
