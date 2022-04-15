@@ -2,10 +2,14 @@ import { useState } from 'react'
 
 const App = () => {
   const [persons, setPersons] = useState([
-    { nimi: 'Arto Hellas' }
+    { nimi: 'Arto Hellas', numero: '040-123456' },
+    { nimi: 'Ada Lovelace', numero: '39-44-5323523' },
+    { nimi: 'Dan Abramov', numero: '12-43-234345' },
+    { nimi: 'Mary Poppendieck', numero: '39-23-6423122' }
   ]) 
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
+  const [filter, setFilter] = useState('')
 
   //tapahtuman käsittelijä uudelle nimelle
   const handleNewName = (event) =>{
@@ -16,6 +20,11 @@ const App = () => {
   //tapahtuman käsittelijä uudelle numerolle
   const handeleNewNumber = (event) => {
     setNewNumber(event.target.value)
+  }
+
+  //tapahtuman käsittelijä hakukentälle
+  const handleFilter = (event) => {
+    setFilter(event.target.value)
   }
 
   const addPerson = (event) => {
@@ -35,11 +44,16 @@ const App = () => {
     setNewNumber(persons.concat(personObject))
     setNewNumber('')
   }
-  
+    
+  const filtteri = persons.filter(persons => persons.nimi.toLowerCase().includes(filter.toLowerCase()))
   return (
     <div>
       <h2>Phonebook</h2>
       <form onSubmit={addPerson}>
+        <div>
+          etsi luettelosta: <input onChange={handleFilter}/>
+        </div>
+        <h2>Lisää uusi henkilö</h2>
         <div>
           nimi: <input value={newName} onChange={handleNewName}/>
         </div>
@@ -51,10 +65,14 @@ const App = () => {
         </div>
       </form>
       <h2>Numbers</h2>
-      {persons.map(persons =>
+      {/*persons.map(persons =>
        <p key={persons.id}>
         {persons.nimi}   {persons.numero}
-       </p>)}
+      </p>)*/}
+       {filtteri.map(persons =>
+        <p key={persons.id}> 
+        {persons.nimi} {persons.numero}
+        </p>)}
     </div>
   )
 }
