@@ -33,10 +33,11 @@ function App() {
       {nautettavat.length > 10 ? (
         <p>Liikaa osumia, tarkenna hakua</p>
       ): (
-        <Maat nautettavat={nautettavat} />
-      )}
+        <Maat nautettavat={nautettavat} sisalto={setNaytettavat} />
+      )} 
+
       {nautettavat.length === 1 ? (
-        <Sisalto tieto={nautettavat[0]}/>
+        <Sisalto tieto={nautettavat[0]}/> 
       ): null}
       
     </div>
@@ -69,13 +70,16 @@ return(
 )
 }
 
-const Maat = ({nautettavat}) => {
+const Maat = ({nautettavat, sisalto}) => {
  return(
    <div>
      {nautettavat.map(maat =>
-      <p key={maat.name.official} >
+      <div key={maat.name.official} >
         {maat.name.common}
-      </p>)}
+
+            <button onClick={() => sisalto([maat]) }>näytä</button>
+      </div>
+      )}
    </div>
  )
 }
