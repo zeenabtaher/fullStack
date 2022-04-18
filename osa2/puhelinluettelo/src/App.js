@@ -11,6 +11,7 @@ const App = () => {
     axios
       .get('http://localhost:3001/persons')
       .then(response => {
+        console.log(response)
         setPersons(response.data)
       })
   }, [])
@@ -33,21 +34,33 @@ const App = () => {
   }
 
   const addPerson = (event) => {
-    if ((persons.some((person) => person.nimi === newName))){
-      console.log('toimii')
-      window.alert(`${newName} on jo puhelinluettelossa`)
-    }
-    
+
     event.preventDefault()
     const personObject = {
       nimi: newName,
       numero: newNumber,
       id: persons.length +1,
     }
-    setPersons(persons.concat(personObject))
+
+    if ((persons.some((person) => person.nimi === newName))){
+      console.log('toimii')
+      window.alert(`${newName} on jo puhelinluettelossa`)
+    }
+    
+    else {
+      //datan lähetys palvelimelle
+     axios
+      .post('http://localhost:3001/persons', personObject)
+      .then(response => {
+        console.log(response)
+        setPersons(persons.concat(response.data))
+      })
+    }
+    
     setNewName('')
-    setNewNumber(persons.concat(personObject))
+    //setNewNumber(persons.concat(response.data))
     setNewNumber('')
+    
   }
     
   const filtteri = persons.filter(persons => persons.nimi.toLowerCase().includes(filter.toLowerCase()))
