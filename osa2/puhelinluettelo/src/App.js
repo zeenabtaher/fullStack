@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
+import personService from './services/persons'
 
 const App = () => {
   const [persons, setPersons] = useState([]) 
@@ -8,14 +8,12 @@ const App = () => {
   const [filter, setFilter] = useState('')
 
   useEffect(() => {
-    axios
-      .get('http://localhost:3001/persons')
+    personService
+      .getAll()
       .then(response => {
-        console.log(response)
         setPersons(response.data)
       })
   }, [])
-
 
   //tapahtuman käsittelijä uudelle nimelle
   const handleNewName = (event) =>{
@@ -48,21 +46,17 @@ const App = () => {
     }
     
     else {
-      //datan lähetys palvelimelle
-     axios
-      .post('http://localhost:3001/persons', personObject)
+      personService
+      .create(personObject)
       .then(response => {
-        console.log(response)
         setPersons(persons.concat(response.data))
       })
+       //setPersons(persons.concat(personObject))
     }
-    
     setNewName('')
-    //setNewNumber(persons.concat(response.data))
     setNewNumber('')
-    
-  }
-    
+  }  
+
   const filtteri = persons.filter(persons => persons.nimi.toLowerCase().includes(filter.toLowerCase()))
   return (
     <div>
