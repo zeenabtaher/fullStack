@@ -58,6 +58,22 @@ const App = () => {
   }  
 
   const filtteri = persons.filter(persons => persons.nimi.toLowerCase().includes(filter.toLowerCase()))
+  
+  const poista = (id) => {
+   
+   const person = persons.find((p) => p.id === id)
+   const tulos = window.confirm(`Haluatko varmasti poistaa ${person.nimi}`)
+   
+
+   if (tulos === true){
+    personService
+    .poista(id)
+    .then(() => {
+      setPersons(persons.filter((person) => person.id !== id))
+    })
+   }
+  }
+
   return (
     <div>
       <h2>Puhelinluettelo</h2>
@@ -72,17 +88,18 @@ const App = () => {
         numberChange = {handeleNewNumber}/>
         
       <h2>Numbers</h2>
-      <Persons filtteri={filtteri} persons={persons}/>
+      <Persons filtteri={filtteri} persons={persons} poista={poista}/>
     </div>
   )
 }
 
-const Persons = ({filtteri}) => {
+const Persons = ({filtteri, poista}) => {
 return(
   <div>
     {filtteri.map(persons =>
     <p key={persons.id}>
       {persons.nimi} {persons.numero}
+      <button onClick={() => poista(persons.id)}>poista</button>
     </p>
    )}
   </div>
