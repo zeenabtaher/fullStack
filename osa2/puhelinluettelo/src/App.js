@@ -41,8 +41,17 @@ const App = () => {
     }
 
     if ((persons.some((person) => person.nimi === newName))){
-      console.log('toimii')
-      window.alert(`${newName} on jo puhelinluettelossa`)
+      const person = persons.find((persons) => persons.nimi === newName)
+      const {id} = person
+      const valinta = window.confirm(`${newName} on jo puhelinluettelossa, haluatko päivittää puhelinnumeroa?`)
+      if (valinta === true){
+        console.log('toimii')
+        personService
+        .update(person.id, personObject)
+        .then((response) => {
+          setPersons(persons.map(person => person.id !== id ? person : response.data))
+        })
+      }
     }
     
     else {
@@ -60,11 +69,10 @@ const App = () => {
   const filtteri = persons.filter(persons => persons.nimi.toLowerCase().includes(filter.toLowerCase()))
   
   const poista = (id) => {
-   
+
    const person = persons.find((p) => p.id === id)
    const tulos = window.confirm(`Haluatko varmasti poistaa ${person.nimi}`)
    
-
    if (tulos === true){
     personService
     .poista(id)
