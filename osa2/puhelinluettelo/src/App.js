@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react'
 import personService from './services/persons'
+import './app.css'
 
 const App = () => {
   const [persons, setPersons] = useState([]) 
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
+  const [ilmoitus, setIlmoitus] = useState('')
 
   useEffect(() => {
     personService
@@ -51,6 +53,12 @@ const App = () => {
         .then((response) => {
           setPersons(persons.map(person => person.id !== id ? person : response.data))
         })
+        .then(() =>{
+          setIlmoitus(`Henkilön ${newName} puhelinnumero on päivitetty`)
+          setTimeout(() => {
+            setIlmoitus(null)
+          }, 5000)
+        })
       }
     }
     
@@ -59,6 +67,12 @@ const App = () => {
       .create(personObject)
       .then(response => {
         setPersons(persons.concat(response.data))
+      })
+      .then(ilmoitus => {
+        setIlmoitus(`Henkilö ${newName} on lisätty puhelinluetteloon`)
+        setTimeout(() => {
+          setIlmoitus(null)
+        }, 5000)
       })
        //setPersons(persons.concat(personObject))
     }
@@ -79,14 +93,21 @@ const App = () => {
     .then(() => {
       setPersons(persons.filter((person) => person.id !== id))
     })
+    .then(ilmoitus => {
+      setIlmoitus(`Henkilö ${person.nimi} on poistettu`)
+      setTimeout(() => {
+        setIlmoitus(null)
+      }, 5000)
+    })
    }
   }
 
   return (
     <div>
       <h2>Puhelinluettelo</h2>
-      
-          <Filter onChange={handleFilter}/>
+        <Notification message={ilmoitus}/>
+
+        <Filter onChange={handleFilter}/>
 
         <h2>Lisää uusi henkilö</h2>
         <PersonForm onSubmit={addPerson} 
@@ -135,4 +156,17 @@ return(
   </form>
 )
 }
+
+const Notification = ({ message }) => {
+  if (message === null) {
+    return null
+  }
+
+  return (
+    <div className='ilmoitus'>
+      {message}
+    </div>
+  )
+}
+
 export default App;
