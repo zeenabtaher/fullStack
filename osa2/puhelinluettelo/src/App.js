@@ -7,7 +7,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
-  const [ilmoitus, setIlmoitus] = useState('')
+  const [ilmoitus, setIlmoitus] = useState(null)
 
   useEffect(() => {
     personService
@@ -93,6 +93,10 @@ const App = () => {
     .then(() => {
       setPersons(persons.filter((person) => person.id !== id))
     })
+    .catch(error => {
+      alert(`${newName} on jo ehditty poistamaan pavelimelta`)
+      setPersons(persons.filter(n => n.id !== id))
+    })
     .then(ilmoitus => {
       setIlmoitus(`Henkilö ${person.nimi} on poistettu`)
       setTimeout(() => {
@@ -161,12 +165,21 @@ const Notification = ({ message }) => {
   if (message === null) {
     return null
   }
-
-  return (
-    <div className='ilmoitus'>
-      {message}
-    </div>
-  )
+  if (message.includes("error")){
+    return(
+      <div className='virhe'>
+          {message}
+      </div>
+    )
+  }
+  else{
+    return (
+      <div className='ilmoitus'>
+        {message}
+      </div>
+    )
+  }
+  
 }
 
 export default App;
