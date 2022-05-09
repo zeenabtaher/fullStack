@@ -55,7 +55,15 @@ app.get('/api/persons', (req, res) => {
       else {
           response.status(404).end()
       }
-      console.log(person)
+      //console.log(person)
+  })
+
+  app.delete('/api/persons/:id', (request, response) => {
+    const id = Number(request.params.id)
+    persons = persons.find(p => p.id !== id)
+
+    response.status(204).end()
+    console.log(person)
   })
 
 const PORT = 3001
