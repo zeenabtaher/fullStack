@@ -3,6 +3,9 @@ const { request } = require('express')
 const express = require('express')
 const app = express()
 
+//pyynnön mukana lähetettyyn dataan päästään käsiksi json-parserin avulla
+app.use(express.json())
+
 let persons = [
    {
        id: 1,
@@ -63,8 +66,39 @@ app.get('/api/persons', (req, res) => {
     persons = persons.find(p => p.id !== id)
 
     response.status(204).end()
-    console.log(person)
+    
   })
+
+    const generateId = () => {
+    const newId = Math.random() * (10000 - 4) + 4
+    return Math.floor(newId)
+}
+
+app.post('/api/persons', (request, response) => {
+    const body = request.body
+
+    if (!body.name || !body.number) {
+        return response.status(404).json({
+            error: 'nimi tai numero puuttuu'
+        })
+    }
+
+    if (persons.find(p => p.name === body.name)) {
+        return response.status(404).json({
+            error: 'lisättävä nimi on jo luettelossa'
+        })
+    }
+
+    const person = {
+        id: generateId(),
+        name: body.name,
+        number: body.number
+    }
+
+    persons = persons.concat(person)
+    response.json(person)
+
+})
 
 const PORT = 3001
 app.listen(PORT, () => {
