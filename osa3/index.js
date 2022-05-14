@@ -7,11 +7,13 @@ const morgan = require('morgan')
 //pyynnön mukana lähetettyyn dataan päästään käsiksi json-parserin avulla
 app.use(express.json())
 
-app.use(morgan('tiny'))
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms'))
 
-const morgan = () => {
+morgan.token('morgan', function (req, res){
+    if (req.method === 'POST') return JSON.stringify(res.json)
 
-}
+    return null
+})
 
 let persons = [
    {
