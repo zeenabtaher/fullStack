@@ -10,7 +10,7 @@ app.use(express.json())
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms'))
 
 morgan.token('morgan', function (req, res){
-    if (req.method === 'POST') return JSON.stringify(res.json)
+    if (req.method === 'POST') return JSON.stringify(req.body)
 
     return null
 })
