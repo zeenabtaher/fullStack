@@ -3,15 +3,15 @@ const { request } = require('express')
 const express = require('express')
 const app = express()
 const morgan = require('morgan')
+const cors = require('cors')
 
 //pyynnön mukana lähetettyyn dataan päästään käsiksi json-parserin avulla
 app.use(express.json())
+app.use(cors())
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms: token'))
 
-app.use(morgan(':method :url :status :res[content-length] - :response-time ms'))
-
-morgan.token('morgan', function (req, res){
+morgan.token('token', (req, res) => {
     if (req.method === 'POST') return JSON.stringify(req.body)
-
     return null
 })
 
@@ -57,9 +57,9 @@ app.get('/api/persons', (req, res) => {
       `)
   })
 
-  app.get('/api/persons/:id', (request,response) => {
+  app.get('/api/persons/:id', (request, response) => {
       const id = Number(request.params.id)
-      person = persons.find(p => p.id === id)
+      const person = persons.find(person => person.id === id)
 
       if (person) {
           response.json(person)
@@ -72,11 +72,9 @@ app.get('/api/persons', (req, res) => {
 
   app.delete('/api/persons/:id', (request, response) => {
     const id = Number(request.params.id)
-    persons = persons.find(p => p.id !== id)
-
+    persons = persons.filter(person => person.id !== id)
     response.status(204).end()
-    
-  })
+})
 
     const generateId = () => {
     const newId = Math.random() * (10000 - 4) + 4
@@ -92,7 +90,7 @@ app.post('/api/persons', (request, response) => {
         })
     }
 
-    if (persons.find(p => p.name === body.name)) {
+    if (persons.find(person => person.name === body.name)) {
         return response.status(404).json({
             error: 'lisättävä nimi on jo luettelossa'
         })
