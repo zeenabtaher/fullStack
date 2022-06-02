@@ -7,6 +7,7 @@ const cors = require('cors')
 
 //pyynnön mukana lähetettyyn dataan päästään käsiksi json-parserin avulla
 app.use(express.json())
+app.use(express.static('build'))
 app.use(cors())
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms: token'))
 
@@ -18,23 +19,23 @@ morgan.token('token', (req, res) => {
 let persons = [
    {
        id: 1,
-       name: "Arto Hellas",
-       number: "040-123456"
+       nimi: "Arto Hellas",
+       numero: "040-123456"
    },
    {
        id: 2,
-       name: "Jarkko Liedes",
-       number: "039-123456"   
+       nimi: "Jarkko Liedes",
+       numero: "039-123456"   
    },
    {
     id: 3,
-    name: "Dan Uunis",
-    number: "12-3456789"
+    nimi: "Dan Uunis",
+    numero: "12-3456789"
    },
    {
     id: 4,
-    name: "Pirkko-Liisa Kattilas",
-    number: "050-123456"
+    nimi: "Pirkko-Liisa Kattilas",
+    numero: "050-123456"
    }
 ]
 
@@ -84,13 +85,14 @@ app.get('/api/persons', (req, res) => {
 app.post('/api/persons', (request, response) => {
     const body = request.body
 
-    if (!body.name || !body.number) {
+    
+    if (!body.nimi || !body.numero) {
         return response.status(404).json({
             error: 'nimi tai numero puuttuu'
         })
     }
 
-    if (persons.find(person => person.name === body.name)) {
+    if (persons.find(person => person.nimi === body.nimi)) {
         return response.status(404).json({
             error: 'lisättävä nimi on jo luettelossa'
         })
@@ -98,8 +100,8 @@ app.post('/api/persons', (request, response) => {
 
     const person = {
         id: generateId(),
-        name: body.name,
-        number: body.number
+        nimi: body.nimi,
+        numero: body.numero
     }
 
     persons = persons.concat(person)
