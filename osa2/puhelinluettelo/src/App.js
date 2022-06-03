@@ -151,7 +151,7 @@ const App = () => {
   
   
  const filtteri = persons.filter(person => person.nimi.toLowerCase().includes(etsiNimi.toLowerCase()))
- console.log(filtteri)
+ console.log()
 
 
   return (

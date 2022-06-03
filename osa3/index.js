@@ -1,9 +1,11 @@
-const { response } = require('express')
-const { request } = require('express')
+//const { response } = require('express')
+//const { request } = require('express')
 const express = require('express')
 const app = express()
 const morgan = require('morgan')
 const cors = require('cors')
+require('dotenv').config()
+const Person = require('./models/person')
 
 //pyynnön mukana lähetettyyn dataan päästään käsiksi json-parserin avulla
 app.use(express.json())
@@ -16,35 +18,14 @@ morgan.token('token', (req, res) => {
     return null
 })
 
-let persons = [
-   {
-       id: 1,
-       nimi: "Arto Hellas",
-       numero: "040-123456"
-   },
-   {
-       id: 2,
-       nimi: "Jarkko Liedes",
-       numero: "039-123456"   
-   },
-   {
-    id: 3,
-    nimi: "Dan Uunis",
-    numero: "12-3456789"
-   },
-   {
-    id: 4,
-    nimi: "Pirkko-Liisa Kattilas",
-    numero: "050-123456"
-   }
-]
-
 app.get('/', (req, res) => {
     res.send('<h1>Hello World!</h1>')
   })
 
-app.get('/api/persons', (req, res) => {
-    res.json(persons)
+  app.get('/api/persons', (req, res) => {
+    Person.find({}).then(persons => {
+      res.json(persons)
+    })
   })
 
 
@@ -59,16 +40,9 @@ app.get('/api/persons', (req, res) => {
   })
 
   app.get('/api/persons/:id', (request, response) => {
-      const id = Number(request.params.id)
-      const person = persons.find(person => person.id === id)
-
-      if (person) {
-          response.json(person)
-      }
-      else {
-          response.status(404).end()
-      }
-      //console.log(person)
+    Person.findById(request.params.id).then(persons => {
+        response.json(persons)
+    })
   })
 
   app.delete('/api/persons/:id', (request, response) => {
@@ -77,39 +51,33 @@ app.get('/api/persons', (req, res) => {
     response.status(204).end()
 })
 
-    const generateId = () => {
-    const newId = Math.random() * (10000 - 4) + 4
-    return Math.floor(newId)
-}
-
-app.post('/api/persons', (request, response) => {
-    const body = request.body
-
-    
-    if (!body.nimi || !body.numero) {
-        return response.status(404).json({
-            error: 'nimi tai numero puuttuu'
-        })
+app.post('/api/persons', (req, res) => {
+    const body = req.body
+  
+    if (!body.nimi) {
+      return res.status(400).json({ error: 'Nimi pakollinen' })
     }
-
-    if (persons.find(person => person.nimi === body.nimi)) {
-        return response.status(404).json({
-            error: 'lisättävä nimi on jo luettelossa'
-        })
+  
+    if (!body.numero) {
+      return res.status(400).json({ error: 'Numero pakollinen' })
     }
-
-    const person = {
-        id: generateId(),
-        nimi: body.nimi,
-        numero: body.numero
-    }
-
-    persons = persons.concat(person)
-    response.json(person)
-
-})
-
-const PORT = process.env.PORT || 3001
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`)
-})
+  
+    const person = new Person({
+      nimi: body.nimi,
+      numero: body.numero,
+    })
+  
+    person.save().then(savedPerson => {
+      res.json(savedPerson.toJSON())
+    })
+  })
+const unknownEndpoint = (request, response) => {
+    response.status(404).send({ error: 'unknown endpoint' })
+  }
+  
+  app.use(unknownEndpoint)
+  
+  const PORT = process.env.PORT
+  app.listen(PORT, () => {
+    console.log(`Serveri käynnistyi portissa ${PORT}`)
+  }) 

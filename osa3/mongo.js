@@ -1,7 +1,5 @@
 const mongoose = require('mongoose')
 
-
-
 //luodaan tietokantaan uusi dokumentti komennolla node mongo.js salasana, jossa salasana on crusteria luotaessa annettu salasana
 const password = process.argv[2]
 const nimi = process.argv[3]
@@ -39,5 +37,3 @@ person.save().then(result => {
   console.log('Tallennettiin ' + `${nimi}  ${numero}` + ' puhelinluetteloon')
   mongoose.connection.close() //tietokantayhteys suljetaan
 })
-
-
