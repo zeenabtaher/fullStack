@@ -12,6 +12,17 @@ mongoose.connect(url)
     console.log('error connecting to MongoDB:', error.message)
   })
 
+  const numeroValidator = {
+    validator: (numero) => {
+      if (numero.includes('-')) {
+        return /^\d{2,3}-\d+/.test(numero) && numero.length >= 9
+      } else {
+        return /^\d{8,}/.test(numero)
+      }
+    },
+    message: "Väärän muotoinen numero"
+  }
+
   const personSchema = new mongoose.Schema({
     nimi: { 
       type: String, 
@@ -19,7 +30,11 @@ mongoose.connect(url)
       unique: true, 
       minlength: 3 
     },
-    numero: String,
+    numero: {
+      type: String,
+      required: true,
+      validate: numeroValidator
+    }
   })
 
 personSchema.set('toJSON', {
