@@ -11,8 +11,16 @@ mongoose.connect(url)
 
 //Määritellään muistiinpanon skeema
 const personSchema = new mongoose.Schema({
-  nimi: String,
-  numero: String,
+  nimi: {
+    type: String,
+    minlength: 1,
+    required: true
+  },
+numero: {
+    type: String,
+    minlength: 1,
+    required: true
+  },
 })
 //skeemaa vastaava model, joka luo kopion skeemasta
 const Person = mongoose.model('Person', personSchema)

@@ -61,14 +61,15 @@ app.get('/', (req, res) => {
     .catch(error => next(error))
 })
 
+
 app.post('/api/persons', (req, res, next) => {
     const body = req.body
   
-    if (!body.nimi) {
+    if (!body.nimi.length === 0) {
       return res.status(400).json({ error: 'Nimi puuttuu' })
     }
   
-    if (!body.numero) {
+    if (!body.numero.length === 0) {
       return res.status(400).json({ error: 'Numero puuttuu' })
     }
   
@@ -83,6 +84,20 @@ app.post('/api/persons', (req, res, next) => {
     .catch((error) => next(error))
   })
 
+  app.put('/api/persons/:id', (request, response, next) => {
+    const person = {
+      nimi: request.body.nimi,
+      numero: request.body.numero,
+    }
+  
+    Person.findByIdAndUpdate(request.params.id, person, {new:true,runValidators:true})
+      .then((updatedPerson) => {
+        response.json(updatedPerson.toJSON())
+      })
+      .catch((error) => next(error))
+  })
+  
+
 const unknownEndpoint = (request, response) => {
     response.status(404).send({ error: 'unknown endpoint' })
   }
@@ -93,7 +108,9 @@ const unknownEndpoint = (request, response) => {
     console.error(error.message)
   
     if (error.name === 'CastError') {
-      return response.status(400).send({ error: 'Väärinmuotoiltu id' })
+      return response.status(400).send({ error: 'malformatted id' })
+  } else if (error.name === 'ValidationError') {
+    return response.status(400).json({ error: error.message })
     }
   
     next(error)

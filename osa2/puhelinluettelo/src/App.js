@@ -42,7 +42,7 @@ const App = () => {
     }
     if (personObject.numero.length < 8) {
       setIlmoitus(
-        `error: Numeron tulee olla vähintään kymmenen merkkiä pitkä`
+       `error: Numeron tulee olla vähintään kahdeksan merkkiä pitkä`
       )
       setTimeout(() => {
         setIlmoitus(null)
@@ -95,6 +95,10 @@ const App = () => {
       })
        //setPersons(persons.concat(personObject))
        .catch(error => {
+        // pääset käsiksi palvelimen palauttamaan virheilmoitusolioon näin
+        console.log(error.response.data)
+      })
+      .catch(error => {
         // pääset käsiksi palvelimen palauttamaan virheilmoitusolioon näin
         console.log(error.response.data)
       })

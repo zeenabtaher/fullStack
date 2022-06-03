@@ -13,7 +13,12 @@ mongoose.connect(url)
   })
 
   const personSchema = new mongoose.Schema({
-    nimi: String,
+    nimi: { 
+      type: String, 
+      required: true, 
+      unique: true, 
+      minlength: 3 
+    },
     numero: String,
   })
 
