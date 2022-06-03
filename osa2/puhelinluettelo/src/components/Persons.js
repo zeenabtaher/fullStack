@@ -4,23 +4,13 @@ const Persons = ({ filtteri, poista }) => {
     return(
         <div>
             {filtteri.map(nimi => 
-                <Person key={nimi.id} person={nimi} number={nimi.numero} poista={poista} />
+                <Person key={nimi.id} person={nimi} numero={nimi.numero} poista={poista} />
             )}
         </div>
     )
 }
 
-const Person = ({ person, poista }) => {
-    return (
-      <p>
-        {person.nimi} {person.numero}
-        {" "}
-        <button onClick={() => poista(person.id)}>poista</button>
-      </p>
-    )
-}
 */
-
 
 const Persons = ({filtteri, poista}) => {
     return(
