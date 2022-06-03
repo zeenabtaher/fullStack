@@ -13,33 +13,31 @@ app.use(morgan(':method :url :status :res[content-length] - :response-time ms: t
 app.use(express.static('build'))
 
 app.use(express.json())
-morgan.token('token', (req, res) => {
+morgan.token('token', (req) => {
     if (req.method === 'POST') return JSON.stringify(req.body)
     return null
 })
 
 app.get('/', (req, res) => {
-    res.send('<h1>Hello World!</h1>')
+  res.send('<h1>Hello World!</h1>')
   })
 
   app.get('/api/persons', (req, res, next) => {
     Person.find({}).then(persons => {
-      res.json(persons)
+    res.json(persons)
     })
-    .catch((error) => next(error))
-  })
+     .catch((error) => next(error))})
 
 
   app.get('/info', (req, res) => {
-      let PVM = new Date()
+    let PVM = new Date()
 
       Person.find({}).then(person => {
-        res.send(`
+      res.send(`
         <p>Puheliluettelossa on yhteensä ${person.length} henkilöä</p>
         <p>Aikaleima: ${PVM}</p>
         `)
-      })
-  })
+      })})
 
   app.get('/api/persons/:id', (request, response, next) => {
     Person.findById(request.params.id)
@@ -55,7 +53,7 @@ app.get('/', (req, res) => {
 
   app.delete('/api/persons/:id', (request, response, next) => {
     Person.findByIdAndRemove(request.params.id)
-    .then(result => {
+    .then(() => {
       response.status(204).end()
     })
     .catch(error => next(error))
@@ -66,11 +64,11 @@ app.post('/api/persons', (req, res, next) => {
     const body = req.body
   
     if (!body.nimi.length === 0) {
-      return res.status(400).json({ error: 'Nimi puuttuu' })
+    return res.status(400).json({ error: 'Nimi puuttuu' })
     }
   
     if (!body.numero.length === 0) {
-      return res.status(400).json({ error: 'Numero puuttuu' })
+    return res.status(400).json({ error: 'Numero puuttuu' })
     }
   
     const person = new Person({
@@ -91,9 +89,7 @@ app.post('/api/persons', (req, res, next) => {
     }
   
     Person.findByIdAndUpdate(request.params.id, person, {new:true,runValidators:true})
-      .then((updatedPerson) => {
-        response.json(updatedPerson.toJSON())
-      })
+      .then((updatedPerson) => {response.json(updatedPerson.toJSON())})
       .catch((error) => next(error))
   })
   
