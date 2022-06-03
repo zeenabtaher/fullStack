@@ -55,11 +55,11 @@ app.post('/api/persons', (req, res) => {
     const body = req.body
   
     if (!body.nimi) {
-      return res.status(400).json({ error: 'Nimi pakollinen' })
+      return res.status(400).json({ error: 'Nimi puuttuu' })
     }
   
     if (!body.numero) {
-      return res.status(400).json({ error: 'Numero pakollinen' })
+      return res.status(400).json({ error: 'Numero puuttuu' })
     }
   
     const person = new Person({
