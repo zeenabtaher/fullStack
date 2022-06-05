@@ -27,9 +27,37 @@ const favoriteBlog = (blogs) => {
         }
         return favorite
 }
+
+const mostBlogs = (blogs) => {
+    if (blogs.length == 0)
+        return 0
+    else
+        // nimet laitetaan taulukkoon
+        var nimet = []
+        for (let i=0; i < blogs.length; i++) {
+            nimet.push(blogs[i].author)
+        }
+
+        // nimien esiintymisen laskenta
+        const counts = {};
+        nimet.forEach(function (x) { counts[x] = (counts[x] || 0) + 1; });
+
+        // nimien järjestäminen
+        const sortedEntriesByVal = Object.entries(counts).sort(([, v1], [, v2]) => v1 - v2);
+        const enitenBlogeja = sortedEntriesByVal[sortedEntriesByVal.length - 1]
+
+        // laitetaan tulos haluttuun lopulliseen muotoon
+        const tulos = {
+            author: enitenBlogeja[0],
+            blogs: enitenBlogeja[1]
+          };
+
+        return tulos
+}
   
   module.exports = {
     dummy,
     totalLikes,
-    favoriteBlog
+    favoriteBlog,
+    mostBlogs
   } 
