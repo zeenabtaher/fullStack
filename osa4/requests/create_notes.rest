@@ -2,8 +2,8 @@ POST http://localhost:3003/api/blogs
 content-Type: application/json
 
 {
-   "title": "ei niin hyvä blogi",
-  "author": "kirjoittaja y",
+   "title": "Maailman paras blogi",
+  "author": "kirjoittaja z",
   "url": "tähän tulee osoite",
-  "likes": 11
+  "likes": 5
 }
