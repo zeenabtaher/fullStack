@@ -46,6 +46,15 @@ describe('blogilista JSON-muodoksi', () => {
   })
 })
 
+test('blogien identifoivan kentän nimi tulee olla id', async() => {
+    const response = await api
+    .get('/api/blogs')
+
+    for( let i=0; i < testiBlogi.length; i++ ){
+        expect(response.body[i].id).toBeDefined()
+    }
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })
