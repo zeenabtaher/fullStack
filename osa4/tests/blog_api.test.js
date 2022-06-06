@@ -74,6 +74,26 @@ test('uuden blogin lisääminen HTTP POST-pyynnöllä', async() => {
     expect(response.body).toHaveLength(testiBlogi.length + 1)
 })
 
+test('blogi, jossa tykkäyksiä ei ole', async() => {
+    const eitykattyBlogi = {
+    "title": "huono blogi",
+    "author": "epämääräinen kirjailija",
+    "url": "tähän tulee osoite",
+    }
+
+    await api
+    .post('/api/blogs')
+    .send(eitykattyBlogi)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+    const response = await api.get('/api/blogs')
+
+    expect(response.body).toHaveLength(testiBlogi.length + 1)
+    
+})
+
+
 afterAll(() => {
   mongoose.connection.close()
 })
