@@ -55,6 +55,25 @@ test('blogien identifoivan kentän nimi tulee olla id', async() => {
     }
 })
 
+test('uuden blogin lisääminen HTTP POST-pyynnöllä', async() => {
+    const uusiBlogi = {
+    "title": "Maailman paras blogi",
+    "author": "kirjoittaja Z",
+    "url": "tähän tulee osoite",
+    "likes": 5
+    }
+
+    await api
+    .post('/api/blogs')
+    .send(uusiBlogi)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+    const response = await api.get('/api/blogs')
+
+    expect(response.body).toHaveLength(testiBlogi.length + 1)
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })
