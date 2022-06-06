@@ -90,7 +90,40 @@ test('blogi, jossa tykkäyksiä ei ole', async() => {
     const response = await api.get('/api/blogs')
 
     expect(response.body).toHaveLength(testiBlogi.length + 1)
-    
+})
+
+test('blogi, jossa ei ole title-kenttää', async() => {
+    const eititleaBlogi = {
+    "author": "epämääräinen kirjailija",
+    "url": "tähän tulee osoite",
+    }
+
+    await api
+    .post('/api/blogs')
+    .send(eititleaBlogi)
+    .expect(400)
+    .expect('Content-Type', /application\/json/)
+
+    const response = await api.get('/api/blogs')
+
+    expect(response.body).toHaveLength(testiBlogi.length)
+})
+
+test('blogi, jossa ei ole url-kenttää', async() => {
+    const eiurlBlogi = {
+    "title": "huono blogi",
+    "author": "epämääräinen kirjailija",
+    }
+
+    await api
+    .post('/api/blogs')
+    .send(eiurlBlogi)
+    .expect(400)
+    .expect('Content-Type', /application\/json/)
+
+    const response = await api.get('/api/blogs')
+
+    expect(response.body).toHaveLength(testiBlogi.length)
 })
 
 
