@@ -126,6 +126,14 @@ test('blogi, jossa ei ole url-kenttää', async() => {
     expect(response.body).toHaveLength(testiBlogi.length)
 })
 
+test('blogin poistaminen', async () => {
+  const response = await api.get('/api/blogs')
+  const ekaId = response.body[0].id
+  await api
+  .delete(`/api/blogs/${ekaId}`)
+  .expect(204)
+})
+
 
 afterAll(() => {
   mongoose.connection.close()
