@@ -8,8 +8,15 @@ usersRouter.post('/', async (request, response) => {
   const existingUser = await User.findOne({ username })
   if (existingUser) {
     return response.status(400).json({
-      error: 'username must be unique'
+      error: 'Käyttäjänimi tulee olla uniikki'
     })
+
+  }
+  if (password.length < 3){
+    return response.status(400).json({ error: 'salasanan täytyy sisältää vähintään kolme merkkiä' })
+  }
+  if (username.length < 3){
+    return response.status(400).json({ error: 'käyttäjätunnuksen täytyy sisältää vähintään kolme merkkiä' })
   }
 
   const saltRounds = 10
