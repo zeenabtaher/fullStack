@@ -16,6 +16,19 @@ blogsRouter.get('/', async (request, response) => {
   response.json(blogs.map((blog) => blog.toJSON()))
 })
 
+blogsRouter.put('/:id', async (request, response) => {
+  const updatedBlog = {
+    ...request.body,
+  }
+  const savedBlog = await Blog.findByIdAndUpdate(
+    request.params.id,
+    updatedBlog,
+    { new: true }
+  )
+  const codeStatus = savedBlog ? 200 : 404
+  response.status(codeStatus).json(savedBlog)
+})
+
 blogsRouter.post('/', async (request, response) => {
   const body = request.body
 

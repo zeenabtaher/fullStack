@@ -1,9 +1,8 @@
-POST http://localhost:3003/api/blogs
+POST http://localhost:3003/api/users
 content-Type: application/json
 
 {
-   "title": "Maailman paras blogi",
-  "author": "kirjoittaja z",
-  "url": "tähän tulee osoite",
-  "likes": 5
+  "username": "fifin",
+  "name": "Maija Meikäläinen",
+  "password": "kissa123"
 }

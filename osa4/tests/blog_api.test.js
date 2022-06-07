@@ -81,7 +81,7 @@ test('uuden blogin lisääminen HTTP POST-pyynnöllä', async() => {
 })
 
 test('blogi, jossa tykkäyksiä ei ole', async() => {
-    const eitykattyBlogi = {
+   /* const eitykattyBlogi = {
     "title": "huono blogi",
     "author": "epämääräinen kirjailija",
     "url": "tähän tulee osoite",
@@ -95,7 +95,22 @@ test('blogi, jossa tykkäyksiä ei ole', async() => {
 
     const response = await api.get('/api/blogs')
 
-    expect(response.body).toHaveLength(testiBlogi.length + 1)
+    expect(response.body).toHaveLength(testiBlogi.length + 1)*/
+
+    const newBlogZeroLikes = {
+      author: 'Robert C. Martin',
+      title: 'Type wars',
+      url: 'http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html',
+    }
+  
+    await api.post('/api/blogs').send(newBlogZeroLikes).expect(201)
+  
+    const blogsInDb = await helper.blogsInDb()
+    expect(blogsInDb).toHaveLength(helper.initialBlogs.length + 1)
+  
+    const likes = blogsInDb.map((blog) => blog.likes)
+    expect(likes).toContain(0)
+
 })
 
 test('blogi, jossa ei ole title-kenttää', async() => {
@@ -193,6 +208,42 @@ describe('alussa on yksi käyttäjä', () => {
 
     const usersAtEnd = await helper.usersInDb()
     expect(usersAtEnd).toHaveLength(usersAtStart.length)
+  })
+
+
+  test('yhden tykkäyksen lisääminen yksittäiseen blogiin', async () => {
+    const blogsInDb = await helper.blogsInDb()
+    const someBlog = blogsInDb[0]
+    const beforeLikes = someBlog.likes
+    someBlog.likes = beforeLikes + 1
+
+    await api.put(`/api/blogs/${someBlog.id}`).send(someBlog).expect(200)
+
+    const updateBlogsInDb = await helper.blogsInDb()
+    const someBlogUpdated = updateBlogsInDb[0]
+
+    expect(someBlogUpdated.likes).toBe(beforeLikes + 1)
+  })
+
+  test('titlen muuttaminen yksittäisestä blogista', async () => {
+    const blogsInDb = await helper.blogsInDb()
+    const someBlog = blogsInDb[0]
+    someBlog.title = 'New Awesome Title'
+
+    await api.put(`/api/blogs/${someBlog.id}`).send(someBlog).expect(200)
+
+    const updateBlogsInDb = await helper.blogsInDb()
+    const someBlogUpdated = updateBlogsInDb[0]
+
+    expect(someBlogUpdated.title).toBe('New Awesome Title')
+  })
+
+  test('väärä id', async () => {
+    const blogsInDb = await helper.blogsInDb()
+    const someBlog = blogsInDb[0]
+    const randomWrongId = '2384rhjfnw23'
+
+    await api.put(`/api/blogs/${randomWrongId}`).send(someBlog).expect(404)
   })
 
 })
