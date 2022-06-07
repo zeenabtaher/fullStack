@@ -3,6 +3,12 @@ const supertest = require('supertest')
 const app = require('../app')
 const api = supertest(app)
 const Blog = require('../models/blog')
+const bcrypt = require('bcrypt')
+const User = require('../models/user')
+
+
+const helper = require('./test_helper')
+
 
 const testiBlogi = [
   {
@@ -94,19 +100,21 @@ test('blogi, jossa tykkäyksiä ei ole', async() => {
 
 test('blogi, jossa ei ole title-kenttää', async() => {
     const eititleaBlogi = {
-    "author": "epämääräinen kirjailija",
-    "url": "tähän tulee osoite",
+      author: 'Robert C. Martin',
+      url: 'http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html',
     }
 
     await api
     .post('/api/blogs')
     .send(eititleaBlogi)
     .expect(400)
-    .expect('Content-Type', /application\/json/)
+    /*.expect('Content-Type', /application\/json/)
 
     const response = await api.get('/api/blogs')
 
-    expect(response.body).toHaveLength(testiBlogi.length)
+    expect(response.body).toHaveLength(testiBlogi.length)*/
+    const blogsInDb = await helper.blogsInDb()
+  expect(blogsInDb).toHaveLength(helper.initialBlogs.length)
 })
 
 test('blogi, jossa ei ole url-kenttää', async() => {
@@ -132,6 +140,61 @@ test('blogin poistaminen', async () => {
   await api
   .delete(`/api/blogs/${ekaId}`)
   .expect(204)
+})
+
+describe('alussa on yksi käyttäjä', () => {
+  beforeEach(async () => {
+    await User.deleteMany({})
+
+    const passwordHash = await bcrypt.hash('sekret', 10)
+    const user = new User({ username: 'root', passwordHash })
+
+    await user.save()
+  })
+
+  test('uuden käyttjänimen tekeminen', async () => {
+    const usersAtStart = await helper.usersInDb()
+
+    const newUser = {
+      username: 'mj',
+      name: 'Maija Meikäläinen',
+      password: 'kissa123',
+    }
+
+    await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+
+    const usersAtEnd = await helper.usersInDb()
+    expect(usersAtEnd).toHaveLength(usersAtStart.length + 1)
+
+    const usernames = usersAtEnd.map(u => u.username)
+    expect(usernames).toContain(newUser.username)
+  })
+
+  test('mikäli kyseinen käyttäjänimi on jo käytössä', async () => {
+    const usersAtStart = await helper.usersInDb()
+
+    const newUser = {
+      username: 'root',
+      name: 'Superuser',
+      password: 'kissa123',
+    }
+
+    const result = await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+
+    expect(result.body.error).toContain('username must be unique')
+
+    const usersAtEnd = await helper.usersInDb()
+    expect(usersAtEnd).toHaveLength(usersAtStart.length)
+  })
+
 })
 
 
