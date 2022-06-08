@@ -2,7 +2,10 @@ POST http://localhost:3003/api/users
 content-Type: application/json
 
 {
-  "username": "arrow",
-  "name": "Maija Meikäläinen",
-  "password": "123"
+  
+  "title": "ei niin hyvä blogi",
+  "author": "kirjoittaja y",
+  "url": "tähän tulee osoite",
+  "likes": 11
+
 }

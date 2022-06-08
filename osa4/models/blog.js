@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-
+//blogin lisätyn käyttäjänn tiedot ovat näkyvillä
 const blogSchema = mongoose.Schema({
     title: String,
     author: String,

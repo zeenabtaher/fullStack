@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 
+//käyttäjine lisämät blogit ovat näkyvillä
 const userSchema = mongoose.Schema({
   username: {
     type: String,
