@@ -3,6 +3,7 @@ import Blog from './components/Blog'
 //import Notification from './components/Notification'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import Footer from './components/Footer'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -10,6 +11,9 @@ const App = () => {
   const [username, setUsername] = useState('') 
   const [password, setPassword] = useState('') 
   const [user, setUser] = useState(null)
+  const [title, setTitle] = useState('') 
+  const [author, setAuthor] = useState('') 
+  const [url, setUrl] = useState('') 
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -42,7 +46,7 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (exception) {
-      setErrorMessage('wrong credentials')
+      setErrorMessage('error: tarkista käyttäjänimi tai salasana')
       setTimeout(() => {
         setErrorMessage(null)
       }, 5000)
@@ -54,23 +58,58 @@ const App = () => {
     setUser(null)
   }
 
+  const handleNewBog = async (event) => {
+
+    event.preventDefault()
+
+    try {
+      await blogService.create({
+        title, author, url,
+      })
+
+      setTitle('')
+      setAuthor('')
+      setUrl('')
+      setErrorMessage(`Blogi "${title}", kirjoittajalta: "${author}" lisättiin listaan`)
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 10000)
+
+      blogService.getAll().then(blogs =>
+        setBlogs( blogs )
+      )
+    } catch (exception) {
+      setErrorMessage('error: uuden blogin julkaiseminen ei onnistunut')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    }
+  }
+
   const Notification = ({ message }) => {
     if (message === null) {
       return null
     }
 
-    return (
-      <div className="error">
-        {message}
-      </div>
-    )
+    if (message.startsWith('error:'))
+      return (
+        <div className="error">
+          {message}
+        </div>
+      )
+    else
+        return (
+          <div className="ilmoitus">
+            {message}
+          </div>
+        )
   }
 
   if (user === null) {
     return (
       <div>
-        <h2>Kirjaudu</h2>
-        <Notification message={errorMessage} />
+       <header><h2>Kirjaudu</h2></header> 
+        <Notification message={errorMessage}/>
         <form onSubmit={handleLogin}>
           <div>
             käyttäjätunnus
@@ -98,11 +137,47 @@ const App = () => {
 
   return (
     <div>
-      <h2>Tervetulo! Blogit ovat luettavissasi</h2>
+      <header><h2>Tervetulo! Blogit ovat luettavissasi</h2></header>
+      <Notification message={errorMessage}/>
       <p>{user.name} kirjautunut sisään <button onClick={handleLogout} type="button"> kirjaudu ulos</button></p> 
+      <div>
+       <h3>Kirjaa uusi blogi</h3>
+       <form onSubmit={handleNewBog}> 
+       <div>
+          otsikko:
+          <input
+            type="text"
+            value={title}
+            name="Title"
+            onChange={({ target }) => setTitle(target.value)}
+          />
+        </div>
+        <div>
+          kirjoittaja:
+          <input
+            type="text"
+            value={author}
+            name="Author"
+            onChange={({ target }) => setAuthor(target.value)}
+          />
+        </div>
+        <div>
+          linkki:
+          <input
+            type="text"
+            value={url}
+            name="Url"
+            onChange={({ target }) => setUrl(target.value)}
+          />
+        </div>
+        <button type="submit">luo uusi</button>
+      </form>
+
+      </div>
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
       )}
+      <Footer/>
     </div>
   )
 }
