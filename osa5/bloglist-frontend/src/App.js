@@ -93,6 +93,19 @@ const App = () => {
     }
   }
 
+  const handleLike = async (id, blogObject) => {
+    try {
+      await blogService.update({id, blogObject})
+      blogService.getAll().then(blogs =>
+        setBlogs( blogs )
+      )
+    } catch (exception) {
+      setErrorMessage('Virhe: Tykkäys epäonnistui')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    }
+  }
   const Notification = ({ message }) => {
     if (message === null) {
       return null
@@ -163,7 +176,7 @@ const App = () => {
 
       </div>
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} paivitys={handleLike}/>
       )}
       <Footer/>
     </div>

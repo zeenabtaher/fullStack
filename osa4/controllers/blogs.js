@@ -2,6 +2,8 @@ const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
 const User = require('../models/user')
 const jwt = require('jsonwebtoken')
+const { request } = require('http')
+const { response } = require('express')
 
 const getTokenFrom = request => {
   const authorization = request.get('authorization')
@@ -12,11 +14,39 @@ const getTokenFrom = request => {
 }
 
 blogsRouter.get('/', async (request, response) => {
+
   const blogs = await Blog.find({})
   response.json(blogs.map((blog) => blog.toJSON()))
+  
+})
+
+blogsRouter.get('/:id', async (request, response) => {
+  const { id } = request.params
+  const blog = await Blog.findById(id)
+
+  if (blog) {
+    response.json(blog.toJSON())
+  } else {
+    response.status(404).end()
+  }
 })
 
 blogsRouter.put('/:id', async (request, response) => {
+  const { body } = request
+  const { id } = request.params
+
+  const blog =  {
+    likes: body.likes
+  }
+
+  const paivitettyBlogi = await Blog.findByIdAndUpdate(id, blog, { new: true })
+
+  if (paivitettyBlogi) {
+    response.status(200).json(paivitettyBlogi.toJSON())
+  } else {
+    response.status(404).end()
+  }
+  /*
   const updatedBlog = {
     ...request.body,
   }
@@ -27,7 +57,10 @@ blogsRouter.put('/:id', async (request, response) => {
   )
   const codeStatus = savedBlog ? 200 : 404
   response.status(codeStatus).json(savedBlog)
+  */
 })
+
+
 
 blogsRouter.post('/', async (request, response) => {
   const body = request.body
