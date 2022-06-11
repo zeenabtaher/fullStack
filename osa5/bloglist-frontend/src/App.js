@@ -106,6 +106,29 @@ const App = () => {
       }, 5000)
     }
   }
+
+  const handleDelete = async (id) => {
+    console.log('poistetaan:', id)
+    const kysymys = window.confirm("Haluatko varmasti poistaa tämän blogin?")
+    if (kysymys) {
+      try {
+        await blogService.deleteBlog(id)
+        blogService.getAll().then(blogs => 
+          setBlogs( blogs )
+        )
+        setErrorMessage('Blogi on poistettu')
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
+      } catch (exception) {
+        setErrorMessage('Virhe: Poisto epäonnistui')
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
+      }
+    }
+  }
+
   const Notification = ({ message }) => {
     if (message === null) {
       return null
@@ -124,7 +147,9 @@ const App = () => {
           </div>
         )
   }
-
+blogs.sort(function (a,b) {
+  return b.likes - a.likes
+})
   if (user === null) {
     return (
       <div>
@@ -176,7 +201,7 @@ const App = () => {
 
       </div>
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} paivitys={handleLike}/>
+        <Blog key={blog.id} blog={blog} paivitys={handleLike} poisto={handleDelete}/>
       )}
       <Footer/>
     </div>

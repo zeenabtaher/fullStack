@@ -1,5 +1,5 @@
 const BlogForm = ({
-    handleUusiBlogi,
+  handleNewBog,
     handleTitleChange,
     handleAuthorChange,
     handleUrlChange,
@@ -10,7 +10,7 @@ const BlogForm = ({
    return (
      <div>
        <h3>Kirjaa uusi blogi</h3>
-      <form onSubmit={handleUusiBlogi}>
+      <form onSubmit={handleNewBog}>
         <div>
           otsikko:
           <input

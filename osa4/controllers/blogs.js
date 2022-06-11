@@ -46,18 +46,7 @@ blogsRouter.put('/:id', async (request, response) => {
   } else {
     response.status(404).end()
   }
-  /*
-  const updatedBlog = {
-    ...request.body,
-  }
-  const savedBlog = await Blog.findByIdAndUpdate(
-    request.params.id,
-    updatedBlog,
-    { new: true }
-  )
-  const codeStatus = savedBlog ? 200 : 404
-  response.status(codeStatus).json(savedBlog)
-  */
+  
 })
 
 
@@ -86,6 +75,9 @@ blogsRouter.post('/', async (request, response) => {
 
 
 blogsRouter.delete('/:id', async (request, response) => {
+  await Blog.findByIdAndRemove(request.params.id)
+  response.status(204).end()
+  /*
   const decodedToken = jwt.verify(request.token, process.env.SECRET)
 
   if (!request.token || !decodedToken.id) {
@@ -101,7 +93,7 @@ blogsRouter.delete('/:id', async (request, response) => {
     response.status(204).end()
   } else {
     response.status(401).json({ error: 'ei oikeuksia poistaa' })
-  }
+  }*/
 })
 
 module.exports = blogsRouter

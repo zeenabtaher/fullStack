@@ -1,6 +1,6 @@
 import TogglableText from "./TogglableText"
 
-const Blog = ({blog, paivitys}) => {
+const Blog = ({blog, paivitys, poisto}) => {
 
   const tykkaa = () => {
     const { id, author, url, title, } = blog
@@ -17,6 +17,12 @@ const Blog = ({blog, paivitys}) => {
     paivitys(id, paivitetty)
   }
 
+  const poista = () => {
+    const { id } = blog
+    poisto(id)
+  }
+
+
 return (
   <div>
    <p>{blog.title} {blog.author}</p> 
@@ -28,8 +34,10 @@ return (
       <br />
       Tykkäykset: <i> {blog.likes} </i> <button onClick={tykkaa}>Tykkää</button>
       <br />
-      Osoite: <i> {blog.url} </i>
+      Linkki: <i> {blog.url} </i>
       </small>
+      <br />
+      <button onClick={poista}>poista blogi</button>
     </TogglableText>
   </div>  
 )}
