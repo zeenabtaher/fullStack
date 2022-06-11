@@ -154,6 +154,7 @@ blogs.sort(function (a,b) {
     return (
       <div>
        <header><h2>Kirjaudu</h2></header> 
+       
         <Notification message={errorMessage}/>
         <form onSubmit={handleLogin}>
           <div>
