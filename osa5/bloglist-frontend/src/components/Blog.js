@@ -2,6 +2,7 @@ import TogglableText from "./TogglableText"
 
 const Blog = ({blog, paivitys, poisto}) => {
 
+
   const tykkaa = () => {
     const { id, author, url, title, } = blog
     if (blog.likes == null) {
@@ -25,21 +26,39 @@ const Blog = ({blog, paivitys, poisto}) => {
 
 return (
   <div>
-   <p>{blog.title} {blog.author}</p> 
+    <p className="title">{blog.title}</p> <p className="author">{blog.author}</p>
+    <TogglableText buttonLabel="Katso" className="blog-tiedot">
+     
+      <small>
+      Aihe: <i className="title"> {blog.title} </i>
+      <br />
+      Kirjoittaja: <i > {blog.author} </i>
+      <br />
+      Tykkäykset: <i className="likes"> {blog.likes} </i> <button onClick={tykkaa}>Tykkää</button>
+      <br />
+      Linkki: <i className="url"> {blog.url} </i>
+      </small>
+      <br />
+      <button onClick={poista}>poista blogi</button>
+    </TogglableText>
+  </div>
+)}
+
+export default Blog
+
+/*<p>{blog.title} {blog.author}</p> 
     <TogglableText buttonLabel="Katso">
       <small>
-      Aihe: <i> {blog.title} </i>
+      Aihe: <i className="title"> {blog.title} </i>
       <br />
-      Kirjoittaja: <i> {blog.author} </i>
+      Kirjoittaja: <i className="author"> {blog.author} </i>
       <br />
-      Tykkäykset: <i> {blog.likes} </i> <button onClick={tykkaa}>Tykkää</button>
+      Tykkäykset: <i className="likes"> {blog.likes} </i> <button onClick={tykkaa}>Tykkää</button>
       <br />
       Linkki: <i> {blog.url} </i>
       </small>
       <br />
       <button onClick={poista}>poista blogi</button>
-    </TogglableText>
-  </div>  
-)}
+    </TogglableText> */
 
-export default Blog
+    
