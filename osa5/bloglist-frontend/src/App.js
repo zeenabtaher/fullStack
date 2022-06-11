@@ -59,7 +59,7 @@ const App = () => {
     }
   }
 
-  const handleLogout = async (event) => {
+  const handleLogout = async () => {
     window.localStorage.removeItem('loggedBlogappUser')
     setUser(null)
   }
@@ -95,10 +95,10 @@ const App = () => {
 
   const handleLike = async (id, blogObject) => {
     try {
-      await blogService.update({id, blogObject})
-      blogService.getAll().then(blogs =>
-        setBlogs( blogs )
-      )
+    await blogService.update({id, blogObject})
+    blogService.getAll().then(blogs =>
+      setBlogs( blogs )
+    )
     } catch (exception) {
       setErrorMessage('Virhe: Tykkäys epäonnistui')
       setTimeout(() => {
@@ -141,11 +141,11 @@ const App = () => {
         </div>
       )
     else
-        return (
-          <div className="ilmoitus">
-            {message}
-          </div>
-        )
+    return (
+      <div className="ilmoitus">
+        {message}
+      </div>
+    )
   }
 blogs.sort(function (a,b) {
   return b.likes - a.likes
@@ -153,8 +153,7 @@ blogs.sort(function (a,b) {
   if (user === null) {
     return (
       <div>
-       <header><h2>Kirjaudu</h2></header> 
-       
+      <header><h2>Kirjaudu</h2></header> 
         <Notification message={errorMessage}/>
         <form onSubmit={handleLogin}>
           <div>
@@ -169,10 +168,10 @@ blogs.sort(function (a,b) {
           <div>
             salasana
               <input
-              type="password"
-              value={password}
-              name="Password"
-              onChange={({ target }) => setPassword(target.value)}
+            type="password"
+            value={password}
+            name="Password"
+            onChange={({ target }) => setPassword(target.value)}
             />
           </div>
           <button type="submit">kirjaudu sisään</button>
