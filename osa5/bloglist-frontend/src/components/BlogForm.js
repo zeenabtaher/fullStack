@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 const BlogForm = ({
-  handleNewBog,
+  handleNewBlog,
     handleTitleChange,
     handleAuthorChange,
     handleUrlChange,
@@ -11,13 +11,13 @@ const BlogForm = ({
    return (
      <div>
        <h3>Kirjaa uusi blogi</h3>
-      <form onSubmit={handleNewBog}>
+      <form onSubmit={handleNewBlog}>
         <div>
           otsikko:
           <input
             type="text"
             value={title}
-            name="Title"
+            name="title"
             onChange={handleTitleChange}
           />
         </div>
@@ -26,7 +26,7 @@ const BlogForm = ({
           <input
             type="text"
             value={author}
-            name="Author"
+            name="author"
             onChange={handleAuthorChange}
           />
         </div>
@@ -35,7 +35,7 @@ const BlogForm = ({
           <input
             type="text"
             value={url}
-            name="Url"
+            name="url"
             onChange={handleUrlChange}
           />
         </div>
@@ -45,7 +45,7 @@ const BlogForm = ({
    )
 }
 BlogForm.propTypes = {
-  handleNewBog: PropTypes.func.isRequired,
+  handleNewBlog: PropTypes.func.isRequired,
   handleTitleChange: PropTypes.func.isRequired,
   handleAuthorChange: PropTypes.func.isRequired,
   handleUrlChange: PropTypes.func.isRequired,

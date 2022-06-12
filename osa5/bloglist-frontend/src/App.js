@@ -64,7 +64,7 @@ const App = () => {
     setUser(null)
   }
 
-  const handleNewBog = async (event) => {
+  const handleNewBlog = async (event) => {
 
     event.preventDefault()
 
@@ -189,7 +189,7 @@ blogs.sort(function (a,b) {
        
       <Togglable buttonLabel='Luo uusi' ref={blogFormRef}>
         <BlogForm 
-         handleNewBog={handleNewBog}
+         handleNewBog={handleNewBlog}
           handleAuthorChange={({ target }) => setAuthor(target.value)}
           handleTitleChange={({ target }) => setTitle(target.value)}
           handleUrlChange={({ target }) => setUrl(target.value)}
