@@ -1,7 +1,7 @@
 import TogglableText from "./TogglableText"
+import { useState } from "react"
 
 const Blog = ({blog, paivitys, poisto}) => {
-
 
   const tykkaa = () => {
     const { id, author, url, title, } = blog
@@ -28,9 +28,8 @@ return (
   <div>
     <p className="title">{blog.title}</p> <p className="author">{blog.author}</p>
     <TogglableText buttonLabel="Katso" className="blog-tiedot">
-     
       <small>
-      Aihe: <i className="title"> {blog.title} </i>
+      Aihe: <i> {blog.title} </i>
       <br />
       Kirjoittaja: <i > {blog.author} </i>
       <br />
@@ -46,19 +45,4 @@ return (
 
 export default Blog
 
-/*<p>{blog.title} {blog.author}</p> 
-    <TogglableText buttonLabel="Katso">
-      <small>
-      Aihe: <i className="title"> {blog.title} </i>
-      <br />
-      Kirjoittaja: <i className="author"> {blog.author} </i>
-      <br />
-      Tykkäykset: <i className="likes"> {blog.likes} </i> <button onClick={tykkaa}>Tykkää</button>
-      <br />
-      Linkki: <i> {blog.url} </i>
-      </small>
-      <br />
-      <button onClick={poista}>poista blogi</button>
-    </TogglableText> */
-
-    
+    /* */
