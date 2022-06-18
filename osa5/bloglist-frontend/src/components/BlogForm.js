@@ -15,6 +15,7 @@ const BlogForm = ({
         <div>
           otsikko:
           <input
+            id='title'
             type="text"
             value={title}
             name="title"
@@ -24,6 +25,7 @@ const BlogForm = ({
         <div>
           kirjoittaja:
           <input
+            id='author'
             type="text"
             value={author}
             name="author"
@@ -33,13 +35,14 @@ const BlogForm = ({
         <div>
           linkki:
           <input
+            id='url'
             type="text"
             value={url}
             name="url"
             onChange={handleUrlChange}
           />
         </div>
-        <button type="submit">Luo uusi</button>
+        <button id='submit-button' type="submit">Luo uusi</button>
       </form>
      </div>
    )

@@ -25,7 +25,7 @@ const Blog = ({blog, paivitys, poisto}) => {
 
 
 return (
-  <div>
+  <div className="blog">
     <p className="title">{blog.title}</p> <p className="author">{blog.author}</p>
     <TogglableText buttonLabel="Katso" className="blog-tiedot">
       <small>
@@ -33,16 +33,14 @@ return (
       <br />
       Kirjoittaja: <i > {blog.author} </i>
       <br />
-      Tykkäykset: <i className="likes"> {blog.likes} </i> <button onClick={tykkaa}>Tykkää</button>
+      Tykkäykset: <i id="likes" className="likes"> {blog.likes} </i> <button id="like-button" onClick={tykkaa}>Tykkää</button>
       <br />
       Linkki: <i className="url"> {blog.url} </i>
       </small>
       <br />
-      <button onClick={poista}>poista blogi</button>
+      <button id="delete-button" onClick={poista}>poista blogi</button>
     </TogglableText>
   </div>
 )}
 
 export default Blog
-
-    /* */

@@ -20,12 +20,12 @@ const App = () => {
 
   const blogFormRef = useRef()
   
-
   useEffect(() => {
-    blogService.getAll().then(blogs =>
-      setBlogs( blogs )
-    )  
+    blogService
+    .getAll()
+    .then((blogs) => setBlogs(blogs.sort((a, b) => b.likes - a.likes)))  
   }, [])
+
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
     if (loggedUserJSON) {
@@ -147,9 +147,7 @@ const App = () => {
       </div>
     )
   }
-blogs.sort(function (a,b) {
-  return b.likes - a.likes
-})
+
   if (user === null) {
     return (
       <div>
@@ -159,6 +157,7 @@ blogs.sort(function (a,b) {
           <div>
             käyttäjätunnus
               <input
+              id='username'
               type="text"
               value={username}
               name="Username"
@@ -168,13 +167,14 @@ blogs.sort(function (a,b) {
           <div>
             salasana
               <input
-            type="password"
-            value={password}
-            name="Password"
-            onChange={({ target }) => setPassword(target.value)}
+              id='password'
+              type="password"
+              value={password}
+              name="Password"
+              onChange={({ target }) => setPassword(target.value)}
             />
           </div>
-          <button type="submit">kirjaudu sisään</button>
+          <button id='login-button' type="submit">kirjaudu sisään</button>
         </form>
       </div>
     )
@@ -182,14 +182,14 @@ blogs.sort(function (a,b) {
 
   return (
     <div>
-      <header><h2>Tervetulo! Blogit ovat luettavissasi</h2></header>
+      <header><h2>Tervetuloa! Blogit ovat luettavissasi</h2></header>
       <Notification message={errorMessage}/>
       <p>{user.name} kirjautunut sisään <button onClick={handleLogout} type="button"> kirjaudu ulos</button></p> 
       <div>
        
       <Togglable buttonLabel='Luo uusi' ref={blogFormRef}>
         <BlogForm 
-         handleNewBog={handleNewBlog}
+         handleNewBlog={handleNewBlog}
           handleAuthorChange={({ target }) => setAuthor(target.value)}
           handleTitleChange={({ target }) => setTitle(target.value)}
           handleUrlChange={({ target }) => setUrl(target.value)}
@@ -200,7 +200,9 @@ blogs.sort(function (a,b) {
       </Togglable>
 
       </div>
-      {blogs.map(blog =>
+      {blogs
+      .sort((a, b) => b.likes - a.likes)
+      .map(blog =>
         <Blog key={blog.id} blog={blog} paivitys={handleLike} poisto={handleDelete}/>
       )}
       <Footer/>
