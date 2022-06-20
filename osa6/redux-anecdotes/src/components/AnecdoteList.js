@@ -6,6 +6,8 @@ import {
   } from "../reducers/notificationReducer"
 
 const AnecdoteList = () => {
+    const dispatch = useDispatch()
+    
     const anecdotes = useSelector((state) => {
         if (state.filter.length === 0) {
           return state.anecdotes
@@ -17,8 +19,7 @@ const AnecdoteList = () => {
           return filteredAnecdotes
         }
       })
-  const dispatch = useDispatch()
-
+  
   const vote = (id) => {
     dispatch(addVoteToAnecdote(id))
     const votedAnecdote = anecdotes.find((a) => a.id === id)
